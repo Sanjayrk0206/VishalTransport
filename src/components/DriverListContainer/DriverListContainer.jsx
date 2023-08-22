@@ -95,13 +95,13 @@ const DListContainer = (props) => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Box w={"60%"}>
+          <Box w={["100%", "60%"]}>
             <InputGroup size="sm">
               <Select
                 value={Vehicle}
                 placeholder="Assign Vehicle"
                 onChange={(e) => setVehicle(e.target.value)}
-                w={["100px", "100%"]}
+                w={"100%"}
               >
                 {props.Vehicle.map((element) => {
                   return (

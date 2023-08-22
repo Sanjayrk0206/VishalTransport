@@ -22,9 +22,9 @@ const ListContainer = (props) => {
   }, [props.element.Unloaded]);
 
   return (
-    <Container>
+    <Container px={0}>
       {console.log(props.element)}
-      <Card size={"md"} variant={"elevated"}>
+      <Card size={["lg", "md"]} variant={"elevated"}>
         <CardHeader display={"inline-flex"} justifyContent={"space-between"}>
           <Heading size={"md"}>
             {props.element.Name} | {props.element.Vehicle}

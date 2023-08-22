@@ -67,7 +67,7 @@ const VListContainer = (props) => {
           justifyContent={"space-between"}
         >
           <VStack w={"60%"}>
-            <HStack>
+            <HStack flexWrap={["wrap", "unset"]}>
               <Text mx={"1"} fontWeight={"bold"} minW={"fit-content"}>
                 NP Date:
               </Text>

@@ -48,7 +48,7 @@ export const Dashboard = () => {
           justifyContent={"center"}
           h={["fit-content", "55%"]}
         >
-          <Box w={"49%"} mr={"1%"}>
+          <Box w={["100%", "49%"]} mr={[0, "1%"]}>
             <Box
               display={"flex"}
               justifyContent={"space-between"}
@@ -72,17 +72,17 @@ export const Dashboard = () => {
               })}
             </VStack>
           </Box>
-          <Box w={"49%"} ml={"1%"}>
+          <Box w={["100%", "49%"]} ml={[0, "1%"]} mt={["5%", 0]}>
             <Heading pl={"2"} size={["sm", "lg"]}>
               Driver Balance
             </Heading>
             <Divider />
-            <VStack overflowY={"scroll"} mt={"2%"} h={"90%"}>
+            <VStack overflowY={"scroll"} mt={"5%"} pb={"5%"}>
               {DList.map((element, index) => {
                 return (
-                  <div key={index}>
+                  <Box key={index} w={"100%"}>
                     <DListContainer element={element} />
-                  </div>
+                  </Box>
                 );
               })}
             </VStack>

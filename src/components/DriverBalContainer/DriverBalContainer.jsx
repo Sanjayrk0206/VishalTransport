@@ -11,7 +11,7 @@ import React from "react";
 
 const DListContainer = (props) => {
   return (
-    <Container>
+    <Container w={"100%"}>
       <Card size={["lg", "md"]} variant={"elevated"}>
         <CardHeader
           display={["inline-block", "inline-flex"]}
@@ -28,7 +28,7 @@ const DListContainer = (props) => {
             {props.element["Vehicle Number"]}
           </Badge>
         </CardHeader>
-        <CardBody py={0} mb={"4%"} display={["inline-block", "inline-flex"]}>
+        <CardBody py={0} mb={"4%"} display={"inline-flex"} flexWrap={"wrap"}>
           <Text mx={"1"} fontWeight={"bold"}>
             Paid:
           </Text>
