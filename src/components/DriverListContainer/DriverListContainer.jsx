@@ -26,47 +26,38 @@ const DListContainer = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleVehicle = async () => {
-    if (Vehicle) {
-      fetch(`${URL}/Adhaar/${props.element.Adhaar}`, {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${BEARER_TOKEN}`,
+    fetch(`${URL}/Adhaar/${props.element.Adhaar}`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
+      },
+      body: JSON.stringify({
+        data: {
+          "Vehicle Number": Vehicle,
         },
-        body: JSON.stringify({
-          data: {
-            "Vehicle Number": Vehicle,
-          },
-        }),
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            toast({
-              title: "Updated Successfully",
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
           toast({
-            title: "Internal Server Error",
-            status: "error",
+            title: "Updated Successfully",
+            status: "success",
             duration: 2000,
             isClosable: true,
           });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast({
+          title: "Internal Server Error",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
         });
-    } else {
-      toast({
-        title: "Fields are Empty",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
       });
-    }
   };
 
   return (

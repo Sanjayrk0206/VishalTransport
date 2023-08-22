@@ -10,16 +10,24 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const ListContainer = (props) => {
+  const [isTrip, setisTrip] = useState(true);
+
+  useEffect(() => {
+    if (props.element.Unloaded) {
+      setisTrip(false);
+    }
+  }, [props.element.Unloaded]);
+
   return (
     <Container>
       {console.log(props.element)}
       <Card size={"md"} variant={"elevated"}>
         <CardHeader display={"inline-flex"} justifyContent={"space-between"}>
           <Heading size={"md"}>
-            {props.element.Driver} | {props.element.Vehicle}
+            {props.element.Name} | {props.element.Vehicle}
           </Heading>
           <Badge
             colorScheme={props.element.isTrip ? "yellow" : "green"}
@@ -27,7 +35,7 @@ const ListContainer = (props) => {
             py={"1.5"}
             px={"3"}
           >
-            {props.element.isTrip ? <>on Trip</> : <>Trip Done</>}
+            {isTrip ? <>on Trip</> : <>Trip Done</>}
           </Badge>
         </CardHeader>
         <CardBody py={0} display={"inline-flex"}>
@@ -45,9 +53,9 @@ const ListContainer = (props) => {
             <Text mx={"1"} fontWeight={"bold"}>
               Loaded Quantity:
             </Text>
-            <Text mx={"1"}>{props.element.LoadedQuantity} kgs.</Text>
+            <Text mx={"1"}>{props.element.Loaded} kgs.</Text>
           </Box>
-          {props.element.isTrip ? (
+          {isTrip ? (
             <Button size={"sm"} colorScheme={"green"}>
               Trip Done
             </Button>
