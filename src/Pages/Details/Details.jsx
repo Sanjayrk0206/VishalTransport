@@ -22,7 +22,9 @@ import DListContainer from "../../components/DriverListContainer/DriverListConta
 import VListContainer from "../../components/VehicleListContainer/VehicleListContainer";
 import AddVehicle from "../../components/AddVehicle/AddVehicle";
 import AddDriver from "../../components/AddDriver/AddDriver";
-import { URL, BEARER_TOKEN } from "../../env";
+import { USERNAME, TOKEN } from "../../env";
+
+const base64 = require("base-64");
 
 export const Details = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,21 +35,47 @@ export const Details = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(URL, {
+    fetch("https://sheetlabs.com/VISH/DriverDetailsApi", {
       method: "GET",
-      headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
+      },
     })
-      .then((response) => response.json())
-      .then((data) => setDList(data));
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then((data) => {
+        setDList(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    fetch(`${URL}?sheet=${"Vehicle Details"}`, {
+    fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
       method: "GET",
-      headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
+      },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
       .then((data) => {
         setVlist(data);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 

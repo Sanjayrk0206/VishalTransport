@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { URL, BEARER_TOKEN } from "../../env";
@@ -23,9 +24,10 @@ export const Dashboard = () => {
   const [Trip, setTrip] = useState([]);
   const [DList, setDList] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [Loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${URL}/search?&sheet=Trip&Unloaded=%00`, {
+    fetch(`${URL}/search?&sheet=Trip&Unloaded=%00&Name=!`, {
       method: "GET",
       headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
     })
@@ -37,10 +39,30 @@ export const Dashboard = () => {
       headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
     })
       .then((response) => response.json())
-      .then((data) => setDList(data));
+      .then((data) => {
+        setDList(data);
+        setLoading(false);
+      });
   }, []);
 
-  return (
+  return Loading ? (
+    <>
+      <Container
+        w={"100%"}
+        my={"20%"}
+        display={"flex"}
+        justifyContent={"center"}
+      >
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Container>
+    </>
+  ) : (
     <>
       <Container maxW={"90%"} h={"90vh"}>
         <Box

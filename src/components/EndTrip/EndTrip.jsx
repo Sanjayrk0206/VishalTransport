@@ -1,7 +1,6 @@
 import {
   Container,
   Box,
-  Select,
   Input,
   Text,
   NumberInput,
@@ -14,16 +13,14 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { URL, BEARER_TOKEN } from "../../env";
 
-export const AddTrip = (props) => {
+export const EndTrip = (props) => {
   const toast = useToast();
-  const [Advance, setAdvance] = useState("");
-  const [Date, setDate] = useState();
-  const [Name, setName] = useState("");
-  const [Vehicle, setVehicle] = useState("");
-  const [From, setFrom] = useState("");
-  const [To, setTo] = useState("");
-  const [Load, setLoad] = useState();
-  const [Rate, setRate] = useState();
+  const [Date, setDate] = useState("");
+  const [Unload, setUnload] = useState("");
+  const [Invoice, setInvoice] = useState();
+  const [Consumption, setConsumption] = useState();
+
+  const Rate = props.element.Rate;
 
   useEffect(() => {
     if (!Date) {
@@ -32,22 +29,24 @@ export const AddTrip = (props) => {
   }, [Date]);
 
   const handleSubmit = async () => {
+    const Loaded = props.element.Loaded;
+    const Shortage = Unload - Loaded > 0 ? 0 : Loaded - Unload;
+
+    let Amount = Unload - Loaded > 0 ? Loaded * Rate : Unload * Rate;
+    Amount /= 1000;
+
     const data = {
-      id: "INCREMENT",
-      Name: Name,
-      Vehicle: Vehicle,
-      From: From,
-      To: To,
-      Loaded: Load,
-      Advance: Advance,
-      Date: Date,
-      Rate: Rate,
-      Payment: "Not Recieved",
+      Unloaded_Date: Date,
+      Unloaded: Unload,
+      Invoice: Invoice,
+      Diesel_Consumption: Consumption,
+      Shortage: Shortage,
+      Amount: Amount,
     };
 
-    if (Name && Vehicle && From && To && Load && Advance && Date) {
-      await fetch(`${URL}?sheet=Trip`, {
-        method: "POST",
+    if (Unload) {
+      await fetch(`${URL}/id/${props.element.id}?sheet=Trip`, {
+        method: "PATCH",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -57,9 +56,9 @@ export const AddTrip = (props) => {
           data: [data],
         }),
       }).then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast({
-            title: "Added Successfully",
+            title: "Updated Successfully",
             status: "success",
             duration: 2000,
             isClosable: true,
@@ -98,45 +97,18 @@ export const AddTrip = (props) => {
             setDate(e.target.value);
           }}
         />
-        <Select
-          mt={"2%"}
-          placeholder="Select Vehicle"
-          value={`${Vehicle} - ${Name}`}
-          onChange={(e) => {
-            setName(e.target.value.split(" - ")[1]);
-            setVehicle(e.target.value.split(" - ")[0]);
-          }}
-        >
-          {props.list.map((element) => {
-            return (
-              element["Vehicle Number"] && (
-                <option
-                  value={`${element["Vehicle Number"]} - ${element.Name}`}
-                >
-                  {element["Vehicle Number"]} - {element.Name}
-                </option>
-              )
-            );
-          })}
-        </Select>
         <Input
-          placeholder="From"
+          placeholder="Invoice/Challen (if any...)"
           mt={"2%"}
-          value={From}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-        <Input
-          placeholder="To"
-          mt={"2%"}
-          value={To}
-          onChange={(e) => setTo(e.target.value)}
+          value={Invoice}
+          onChange={(e) => setInvoice(e.target.value)}
         />
         <Box my={"2%"}>
-          <Text>Loading Quantity:</Text>
+          <Text>Unloading Quantity:</Text>
           <NumberInput>
             <NumberInputField
-              value={Load}
-              onChange={(e) => setLoad(e.target.value)}
+              value={Unload}
+              onChange={(e) => setUnload(e.target.value)}
             />
             <NumberInputStepper>
               <Text
@@ -152,20 +124,11 @@ export const AddTrip = (props) => {
           </NumberInput>
         </Box>
         <Box>
-          <Text>Rate:</Text>
+          <Text>Diesel Consumption</Text>
           <NumberInput>
             <NumberInputField
-              onChange={(e) => setRate(e.target.value)}
-              value={Rate}
-            />
-          </NumberInput>
-        </Box>
-        <Box>
-          <Text>Advance:</Text>
-          <NumberInput>
-            <NumberInputField
-              onChange={(e) => setAdvance(e.target.value)}
-              value={Advance}
+              onChange={(e) => setConsumption(e.target.value)}
+              value={Consumption}
             />
           </NumberInput>
         </Box>

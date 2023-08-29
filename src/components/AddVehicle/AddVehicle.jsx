@@ -9,7 +9,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { URL, BEARER_TOKEN } from "../../env";
+import { USERNAME, TOKEN } from "../../env";
 
 const AddVehicle = (props) => {
   const toast = useToast();
@@ -26,17 +26,20 @@ const AddVehicle = (props) => {
   const [Date, setDate] = useState();
 
   const handleSubmit = async () => {
-    const data = {
-      Registration: Registration,
-      Engine: Engine,
-      Chassis: Chassis,
-      "Insurance Expiry Date": Insurance,
-      "RC Validity Date": RC,
-      "NP Date": NP,
-      "MP Tax Date": MP,
-      "Load Amount": Loan,
-      "Monthly Date": Date,
-    };
+    let data = [
+      {
+        Registration: Registration,
+        Engine: Engine,
+        Chassis: Chassis,
+        InsuranceExpiryDate: Insurance,
+        RCValidityDate: RC,
+        NPDate: NP,
+        MPTaxDate: MP,
+        LoanAmount: Loan,
+        MonthlyDate: Date,
+        isTrip: false,
+      },
+    ];
 
     console.log(data);
     if (
@@ -61,18 +64,15 @@ const AddVehicle = (props) => {
           isClosable: true,
         });
       } else {
-        await fetch(`${URL}?sheet=${"Vehicle Details"}`, {
+        await fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
           method: "POST",
           headers: {
-            Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${BEARER_TOKEN}`,
+            Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
           },
-          body: JSON.stringify({
-            data: [data],
-          }),
+          body: JSON.stringify(data),
         }).then((response) => {
-          if (response.status === 201) {
+          if (response.status === 204) {
             toast({
               title: "Added Successfully",
               status: "success",
@@ -108,39 +108,41 @@ const AddVehicle = (props) => {
         <Input
           variant="flushed"
           placeholder="Registration Number"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           value={Registration}
           onChange={(e) => {
             setRegistration(e.target.value);
           }}
         />
-        <Input
-          variant="flushed"
-          placeholder="Attachments"
-          w={"max(150px, 40%)"}
-          type="file"
-        />
       </Box>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={"0.5%"}
+      >
         <Input
           variant="flushed"
           placeholder="Engine Number"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           value={Engine}
           onChange={(e) => setEngine(e.target.value)}
         />
         <Input
           variant="flushed"
           placeholder="Chassis Number"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           minLength={17}
           maxLength={17}
           value={Chassis}
           onChange={(e) => setChassis(e.target.value)}
         />
       </Box>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
-        <Box w={"max(150px, 40%)"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={"0.5%"}
+      >
+        <Box w={["100%", "40%"]}>
           <Text>Insurance Expiry Date:</Text>
           <Input
             variant="flushed"
@@ -150,7 +152,7 @@ const AddVehicle = (props) => {
             onChange={(e) => setInsurance(e.target.value)}
           />
         </Box>
-        <Box w={"max(150px, 40%)"}>
+        <Box w={["100%", "40%"]}>
           <Text>RC Validity Date:</Text>
           <Input
             variant="flushed"
@@ -171,8 +173,12 @@ const AddVehicle = (props) => {
       >
         <Heading size={"md"}>Secondary Details</Heading>
       </Box>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
-        <Box display={"block"} w={"max(150px, 40%)"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={"0.5%"}
+      >
+        <Box display={"block"} w={["100%", "40%"]}>
           <Text>NP Date:</Text>
           <Input
             variant="flushed"
@@ -182,7 +188,7 @@ const AddVehicle = (props) => {
             onChange={(e) => setNP(e.target.value)}
           />
         </Box>
-        <Box display={"block"} w={"max(150px, 40%)"}>
+        <Box display={"block"} w={["100%", "40%"]}>
           <Text>MP Tax Date:</Text>
           <Input
             variant="flushed"
@@ -213,21 +219,21 @@ const AddVehicle = (props) => {
         />
       </Box>
       <Box
-        display={isloan ? "flex" : "none"}
+        display={isloan ? ["block", "flex"] : "none"}
         justifyContent={"space-around"}
         p={"0.5%"}
       >
         <Input
           variant="flushed"
           placeholder="Loan Amount"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           value={Loan}
           onChange={(e) => setLoan(e.target.value)}
         />
         <Input
           variant="flushed"
           placeholder="Monthly Date"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           type="date"
           value={Date}
           onChange={(e) => setDate(e.target.value)}

@@ -8,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { BEARER_TOKEN, URL } from "../../env";
+import { TOKEN, USERNAME } from "../../env";
 
 const AddDriver = (props) => {
   const toast = useToast();
@@ -19,13 +19,15 @@ const AddDriver = (props) => {
   const [Date, setDate] = useState();
 
   const handleSubmit = async () => {
-    const data = {
-      Name: Name,
-      Mobile: Mobile,
-      Adhaar: Adhaar,
-      "Driving License": Driving,
-      "DL Expiry Date": Date,
-    };
+    let data = [
+      {
+        Name: Name,
+        Mobile: Mobile,
+        Adhaar: Adhaar,
+        DrivingLicense: Driving,
+        DLExpiry: Date,
+      },
+    ];
 
     if (Name && Mobile && Adhaar && Driving && Date) {
       if (
@@ -39,18 +41,15 @@ const AddDriver = (props) => {
           isClosable: true,
         });
       } else {
-        await fetch(URL, {
+        await fetch("https://sheetlabs.com/VISH/DriverDetailsApi", {
           method: "POST",
           headers: {
-            Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${BEARER_TOKEN}`,
+            Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
           },
-          body: JSON.stringify({
-            data: [data],
-          }),
+          body: JSON.stringify(data),
         }).then((response) => {
-          if (response.status === 201) {
+          if (response.status === 204) {
             toast({
               title: "Added Successfully",
               status: "success",
@@ -82,26 +81,28 @@ const AddDriver = (props) => {
 
   return (
     <Container maxW={"100%"} mb={"5vh"}>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={["2.5%", "0.5%"]}
+      >
         <Input
           variant="flushed"
           placeholder="Name"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           value={Name}
           onChange={(e) => {
             setName(e.target.value);
           }}
           isRequired
         />
-        <Input
-          variant="flushed"
-          placeholder="Attachments"
-          w={"max(150px, 40%)"}
-          type="file"
-        />
       </Box>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
-        <NumberInput variant="flushed" w={"max(150px, 40%)"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={["2.5%", "0.5%"]}
+      >
+        <NumberInput variant="flushed" w={["100%", "40%"]}>
           <NumberInputField
             placeholder="Mobile Number"
             minLength={10}
@@ -113,7 +114,7 @@ const AddDriver = (props) => {
             isRequired
           />
         </NumberInput>
-        <NumberInput variant="flushed" w={"max(150px, 40%)"}>
+        <NumberInput variant="flushed" w={["100%", "40%"]} pt={["2.5%", "0"]}>
           <NumberInputField
             placeholder="Adhaar Number"
             minLength={12}
@@ -126,11 +127,15 @@ const AddDriver = (props) => {
           />
         </NumberInput>
       </Box>
-      <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
+      <Box
+        display={["block", "flex"]}
+        justifyContent={"space-around"}
+        p={["2.5%", "0.5%"]}
+      >
         <Input
           variant="flushed"
           placeholder="Driving License"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           value={Driving}
           onChange={(e) => {
             setDrivingLicense(e.target.value);
@@ -140,15 +145,16 @@ const AddDriver = (props) => {
         <Input
           variant="flushed"
           placeholder="DL Expiry Date"
-          w={"max(150px, 40%)"}
+          w={["100%", "40%"]}
           type="date"
           value={Date}
           onChange={(e) => {
             setDate(e.target.value);
           }}
+          pt={["2.5%", "0"]}
         />
       </Box>
-      <Box display={"flex"} justifyContent={"center"} p={"0.5%"}>
+      <Box display={"flex"} justifyContent={"center"} p={["2.5%", "0.5%"]}>
         <Button
           my={"2.5%"}
           mx={"1.5%"}

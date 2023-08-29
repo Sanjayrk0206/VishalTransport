@@ -10,32 +10,36 @@ import {
   AlertDialogFooter,
   Button,
 } from "@chakra-ui/react";
-import { URL, BEARER_TOKEN } from "../env";
+import { TOKEN, USERNAME } from "../env";
 
 const DeleteDialog = (props) => {
   const toast = useToast();
   const cancelRef = React.useRef();
 
   const handleDelete = () => {
-    let local_URL = `${URL}/Adhaar/${props.Adhaar}`;
+    let data = [
+      {
+        __id: props.id,
+      },
+    ];
+
+    let local_URL = "DriverDetailsApi";
 
     if (props.isVehicle) {
-      local_URL = `${URL}/Registration/${
-        props.Adhaar
-      }?sheet=${"Vehicle Details"}`;
+      local_URL = "VehicleDetailsApi";
     }
 
-    if (props.Adhaar) {
-      fetch(local_URL, {
+    if (props.id) {
+      fetch(`https://sheetlabs.com/VISH/${local_URL}`, {
         method: "DELETE",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${BEARER_TOKEN}`,
+          Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
         },
+        body: JSON.stringify(data),
       })
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 204) {
             toast({
               title: "Deleted Successfully",
               status: "success",

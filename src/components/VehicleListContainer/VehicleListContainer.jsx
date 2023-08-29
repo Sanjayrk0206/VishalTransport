@@ -37,7 +37,7 @@ const VListContainer = (props) => {
               mx={"0.5"}
               my={["2", "unset"]}
             >
-              {props.element["Insurance Expiry Date"]}
+              {props.element.InsuranceExpiryDate.toString().slice(0, 10)}
             </Badge>
             <Badge
               colorScheme={"green"}
@@ -47,12 +47,12 @@ const VListContainer = (props) => {
               mx={"0.5"}
               my={["2", "unset"]}
             >
-              {props.element["RC Validity Date"]}
+              {props.element.RCValidityDate.toString().slice(0, 10)}
             </Badge>
           </Box>
         </CardHeader>
-        <CardBody py={0} display={["inline-block", "inline-flex"]}>
-          <Text mx={"1"} fontWeight={"bold"}>
+        <CardBody py={0} px={"3%"} display={["inline-block", "inline-flex"]}>
+          <Text ml={"0"} mx={"1"} fontWeight={"bold"}>
             Chassis No.:
           </Text>
           <Text mx={"1"}>{props.element.Chassis}</Text>
@@ -65,28 +65,36 @@ const VListContainer = (props) => {
           display={["block", "flex"]}
           alignItems={"center"}
           justifyContent={"space-between"}
+          pt={0}
+          px={"3%"}
         >
           <VStack w={"60%"}>
             <HStack flexWrap={["wrap", "unset"]}>
               <Text mx={"1"} fontWeight={"bold"} minW={"fit-content"}>
                 NP Date:
               </Text>
-              <Text mx={"1"}>{props.element["NP Date"]}</Text>
+              <Text mx={"1"}>
+                {props.element.NPDate.toString().slice(0, 10)}
+              </Text>
               <Text mx={"1"} fontWeight={"bold"} minW={"fit-content"}>
                 MP Tax Date:
               </Text>
-              <Text mx={"1"}>{props.element["MP Tax Date"]}</Text>
+              <Text mx={"1"}>
+                {props.element.MPTaxDate.toString().slice(0, 10)}
+              </Text>
             </HStack>
-            {props.element["Loan Amount"] && props.element["Monthly Date"] ? (
+            {props.element.LoanAmount && props.element.MonthlyDate ? (
               <HStack>
                 <Text mx={"1"} fontWeight={"bold"} minW={"fit-content"}>
                   Load Amount:
                 </Text>
-                <Text mx={"1"}>{props.element["Loan Amount"]}</Text>
+                <Text mx={"1"}>{props.element.LoanAmount}</Text>
                 <Text mx={"1"} fontWeight={"bold"} minW={"fit-content"}>
                   Monthly Date:
                 </Text>
-                <Text mx={"1"}>{props.element["Monthly Date"]}</Text>
+                <Text mx={"1"}>
+                  {props.element.MonthlyDate.toString().slice(0, 10)}
+                </Text>
               </HStack>
             ) : (
               <></>
