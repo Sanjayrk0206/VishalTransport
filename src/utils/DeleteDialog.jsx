@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   Button,
 } from "@chakra-ui/react";
-import { TOKEN, USERNAME } from "../env";
+import { TOKEN, URL, USERNAME } from "../env";
 
 const DeleteDialog = (props) => {
   const toast = useToast();
@@ -30,7 +30,7 @@ const DeleteDialog = (props) => {
     }
 
     if (props.id) {
-      fetch(`https://sheetlabs.com/VISH/${local_URL}`, {
+      fetch(`${URL}/${local_URL}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

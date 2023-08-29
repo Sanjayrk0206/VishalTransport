@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { URL, BEARER_TOKEN } from "../../env";
+import { USERNAME, TOKEN, URL } from "../../env";
 
 export const EndTrip = (props) => {
   const toast = useToast();
@@ -35,28 +35,29 @@ export const EndTrip = (props) => {
     let Amount = Unload - Loaded > 0 ? Loaded * Rate : Unload * Rate;
     Amount /= 1000;
 
-    const data = {
-      Unloaded_Date: Date,
-      Unloaded: Unload,
-      Invoice: Invoice,
-      Diesel_Consumption: Consumption,
-      Shortage: Shortage,
-      Amount: Amount,
-    };
+    let data = [
+      {
+        __id: props.element.__id,
+        TripDone: true,
+        UnloadedDate: Date,
+        Unloaded: parseInt(Unload),
+        Shortage: Shortage,
+        Amount: Amount,
+        Invoice: Invoice,
+        DieselConsumption: parseInt(Consumption),
+      },
+    ];
 
     if (Unload) {
-      await fetch(`${URL}/id/${props.element.id}?sheet=Trip`, {
+      await fetch(`${URL}/TripDetailsApi`, {
         method: "PATCH",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${BEARER_TOKEN}`,
+          Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
         },
-        body: JSON.stringify({
-          data: [data],
-        }),
+        body: JSON.stringify(data),
       }).then((response) => {
-        if (response.status === 200) {
+        if (response.status === 204) {
           toast({
             title: "Updated Successfully",
             status: "success",

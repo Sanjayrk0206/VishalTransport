@@ -17,18 +17,11 @@ import {
   ModalBody,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { EndTrip } from "../EndTrip/EndTrip";
 
 const ListContainer = (props) => {
-  const [isTrip, setisTrip] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (props.element.Unloaded) {
-      setisTrip(false);
-    }
-  }, [props.element.Unloaded]);
 
   return (
     <>
@@ -36,7 +29,7 @@ const ListContainer = (props) => {
         <Card size={["lg", "md"]} variant={"elevated"}>
           <CardHeader display={"inline-flex"} justifyContent={"space-between"}>
             <Heading size={"md"}>
-              {props.element.Name} | {props.element.Vehicle}
+              {props.element.Driver} | {props.element.Vehicle}
             </Heading>
             <Badge
               colorScheme={props.element.isTrip ? "yellow" : "green"}
@@ -44,7 +37,7 @@ const ListContainer = (props) => {
               py={"1.5"}
               px={"3"}
             >
-              {isTrip ? <>on Trip</> : <>Trip Done</>}
+              On Trip
             </Badge>
           </CardHeader>
           <CardBody py={0} display={"inline-flex"}>
@@ -64,18 +57,9 @@ const ListContainer = (props) => {
               </Text>
               <Text mx={"1"}>{props.element.Loaded} kgs.</Text>
             </Box>
-            {isTrip ? (
-              <Button size={"sm"} colorScheme={"green"} onClick={onOpen}>
-                Trip Done
-              </Button>
-            ) : (
-              <Box display={"inline-flex"} fontSize={"sm"}>
-                <Text mx={"1"} fontWeight={"bold"}>
-                  Unloaded Quantity:
-                </Text>
-                <Text mx={"1"}>{props.element.UnloadedQuantity} kgs.</Text>
-              </Box>
-            )}
+            <Button size={"sm"} colorScheme={"green"} onClick={onOpen}>
+              Trip Done
+            </Button>
           </CardFooter>
         </Card>
       </Container>

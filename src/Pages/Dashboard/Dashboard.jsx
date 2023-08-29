@@ -15,33 +15,72 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { URL, BEARER_TOKEN } from "../../env";
+import { USERNAME, TOKEN, URL } from "../../env";
 import ListContainer from "../../components/TripListContainer/TripListContainer";
 import DListContainer from "../../components/DriverBalContainer/DriverBalContainer";
 import { AddTrip } from "../../components/AddTrip/AddTrip";
 
+const base64 = require("base-64");
+
 export const Dashboard = () => {
   const [Trip, setTrip] = useState([]);
   const [DList, setDList] = useState([]);
+  const [Vlist, setVlist] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [Loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${URL}/search?&sheet=Trip&Unloaded=%00&Name=!`, {
+    fetch(`${URL}/TripDetailsApi?TripDone=false`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
+      },
     })
       .then((response) => response.json())
       .then((data) => setTrip(data));
 
-    fetch(URL, {
+    fetch(`${URL}/DriverDetailsApi`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
+      },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
       .then((data) => {
         setDList(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    fetch(`${URL}/VehicleDetailsApi`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then((data) => {
+        setVlist(data);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
@@ -124,7 +163,7 @@ export const Dashboard = () => {
           <ModalHeader>{"Trip Details"}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddTrip list={DList} onClose={onClose} />
+            <AddTrip Dlist={DList} Vlist={Vlist} onClose={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>

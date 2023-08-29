@@ -1,5 +1,4 @@
 import {
-  Badge,
   Card,
   CardBody,
   CardHeader,
@@ -18,29 +17,24 @@ const DListContainer = (props) => {
           justifyContent={"space-between"}
         >
           <Heading size={"md"}>{props.element.Name}</Heading>
-          <Badge
-            colorScheme={"linkedin"}
-            h={"fit-content"}
-            py={"1.5"}
-            px={"3"}
-            my={["2", "unset"]}
-          >
-            {props.element["Vehicle Number"]}
-          </Badge>
         </CardHeader>
         <CardBody py={0} mb={"4%"} display={"inline-flex"} flexWrap={"wrap"}>
           <Text mx={"1"} fontWeight={"bold"}>
-            Paid:
-          </Text>
-          <Text mx={"1"}>{props.element.Trip_Paid}</Text>
-          <Text mx={"1"} fontWeight={"bold"}>
             Unpaid:
           </Text>
-          <Text mx={"1"}>{props.element.Trip_Unpaid}</Text>
+          <Text mx={"1"}>{props.element.UnpaidTrip}</Text>
           <Text mx={"1"} fontWeight={"bold"}>
             Total:
           </Text>
-          <Text mx={"1"}>{props.element.Trip_Total}</Text>
+          <Text mx={"1"}>{props.element.TotalTrip}</Text>
+          <Text mx={"1"} fontWeight={"bold"}>
+            Advance:
+          </Text>
+          <Text mx={"1"}>{props.element.TotalAdvance}</Text>
+          <Text mx={"1"} fontWeight={"bold"}>
+            Batta:
+          </Text>
+          <Text mx={"1"}>{props.element.Batta}</Text>
         </CardBody>
       </Card>
     </Container>

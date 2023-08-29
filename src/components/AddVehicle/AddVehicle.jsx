@@ -9,7 +9,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { USERNAME, TOKEN } from "../../env";
+import { USERNAME, TOKEN, URL } from "../../env";
 
 const AddVehicle = (props) => {
   const toast = useToast();
@@ -64,7 +64,7 @@ const AddVehicle = (props) => {
           isClosable: true,
         });
       } else {
-        await fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+        await fetch(`${URL}/VehicleDetailsApi`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

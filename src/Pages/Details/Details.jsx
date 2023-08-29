@@ -22,7 +22,7 @@ import DListContainer from "../../components/DriverListContainer/DriverListConta
 import VListContainer from "../../components/VehicleListContainer/VehicleListContainer";
 import AddVehicle from "../../components/AddVehicle/AddVehicle";
 import AddDriver from "../../components/AddDriver/AddDriver";
-import { USERNAME, TOKEN } from "../../env";
+import { USERNAME, TOKEN, URL } from "../../env";
 
 const base64 = require("base-64");
 
@@ -35,7 +35,7 @@ export const Details = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("https://sheetlabs.com/VISH/DriverDetailsApi", {
+    fetch(`${URL}/DriverDetailsApi`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const Details = () => {
         console.error(error);
       });
 
-    fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+    fetch(`${URL}/VehicleDetailsApi`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { TOKEN, USERNAME } from "../../env";
+import { TOKEN, URL, USERNAME } from "../../env";
 
 const AddDriver = (props) => {
   const toast = useToast();
@@ -41,7 +41,7 @@ const AddDriver = (props) => {
           isClosable: true,
         });
       } else {
-        await fetch("https://sheetlabs.com/VISH/DriverDetailsApi", {
+        await fetch(`${URL}/DriverDetailsApi`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

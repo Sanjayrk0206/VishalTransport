@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { URL, BEARER_TOKEN } from "../../env";
+import { USERNAME, TOKEN, URL } from "../../env";
 
 export const AddTrip = (props) => {
   const toast = useToast();
@@ -24,6 +24,7 @@ export const AddTrip = (props) => {
   const [To, setTo] = useState("");
   const [Load, setLoad] = useState();
   const [Rate, setRate] = useState();
+  const [Product, setProduct] = useState("");
 
   useEffect(() => {
     if (!Date) {
@@ -32,32 +33,31 @@ export const AddTrip = (props) => {
   }, [Date]);
 
   const handleSubmit = async () => {
-    const data = {
-      id: "INCREMENT",
-      Name: Name,
-      Vehicle: Vehicle,
-      From: From,
-      To: To,
-      Loaded: Load,
-      Advance: Advance,
-      Date: Date,
-      Rate: Rate,
-      Payment: "Not Recieved",
-    };
+    let data = [
+      {
+        Date: Date,
+        Driver: Name,
+        Vehicle: Vehicle,
+        From: From,
+        To: To,
+        Loaded: parseInt(Load),
+        Rate: parseInt(Rate),
+        Product: Product,
+        Advance: parseInt(Advance),
+        TripDone: false,
+      },
+    ];
 
     if (Name && Vehicle && From && To && Load && Advance && Date) {
-      await fetch(`${URL}?sheet=Trip`, {
+      await fetch(`${URL}/TripDetailsApi`, {
         method: "POST",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${BEARER_TOKEN}`,
+          Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
         },
-        body: JSON.stringify({
-          data: [data],
-        }),
+        body: JSON.stringify(data),
       }).then((response) => {
-        if (response.status === 201) {
+        if (response.status === 204) {
           toast({
             title: "Added Successfully",
             status: "success",
@@ -100,22 +100,29 @@ export const AddTrip = (props) => {
         />
         <Select
           mt={"2%"}
-          placeholder="Select Vehicle"
-          value={`${Vehicle} - ${Name}`}
+          placeholder="Select Drive"
+          value={Name}
           onChange={(e) => {
-            setName(e.target.value.split(" - ")[1]);
-            setVehicle(e.target.value.split(" - ")[0]);
+            setName(e.target.value);
           }}
         >
-          {props.list.map((element) => {
+          {props.Dlist.map((element) => {
+            return <option value={element.Name}>{element.Name}</option>;
+          })}
+        </Select>
+        <Select
+          mt={"2%"}
+          placeholder="Select Vehicle"
+          value={Vehicle}
+          onChange={(e) => {
+            setVehicle(e.target.value);
+          }}
+        >
+          {props.Vlist.map((element) => {
             return (
-              element["Vehicle Number"] && (
-                <option
-                  value={`${element["Vehicle Number"]} - ${element.Name}`}
-                >
-                  {element["Vehicle Number"]} - {element.Name}
-                </option>
-              )
+              <option value={element.Registration}>
+                {element.Registration}
+              </option>
             );
           })}
         </Select>
@@ -124,12 +131,21 @@ export const AddTrip = (props) => {
           mt={"2%"}
           value={From}
           onChange={(e) => setFrom(e.target.value)}
+          autoComplete
         />
         <Input
           placeholder="To"
           mt={"2%"}
           value={To}
           onChange={(e) => setTo(e.target.value)}
+          autoComplete
+        />
+        <Input
+          placeholder="Product"
+          mt={"2%"}
+          value={Product}
+          onChange={(e) => setProduct(e.target.value)}
+          autoComplete
         />
         <Box my={"2%"}>
           <Text>Loading Quantity:</Text>
