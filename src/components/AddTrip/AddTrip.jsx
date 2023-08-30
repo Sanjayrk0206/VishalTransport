@@ -18,19 +18,40 @@ export const AddTrip = (props) => {
   const toast = useToast();
   const [Advance, setAdvance] = useState("");
   const [Date, setDate] = useState();
-  const [Name, setName] = useState("");
+  const [Name, setName] = useState();
   const [Vehicle, setVehicle] = useState("");
   const [From, setFrom] = useState("");
   const [To, setTo] = useState("");
   const [Load, setLoad] = useState();
   const [Rate, setRate] = useState();
   const [Product, setProduct] = useState("");
+  const [Adhaar, setAdhaar] = useState("");
+  const [CAdvance, setCAdvance] = useState("");
+  const [CTrips, setCTrips] = useState();
+
+  const [Object, setObject] = useState();
 
   useEffect(() => {
     if (!Date) {
       setDate(moment().format("YYYY-MM-DD"));
     }
-  }, [Date]);
+    if (Object) {
+      setName(`${Object.Name} - ${Object.Adhaar}`);
+      setCTrips((Object.Trips ? Object.Trips : 0) + 1);
+      if (Object.TotalAdvance) {
+        setCAdvance(
+          (parseInt(Object.TotalAdvance) + parseInt(Advance)).toString()
+        );
+      } else {
+        setCAdvance(Advance);
+      }
+    }
+  }, [Date, Object, Advance]);
+
+  const handleItem = (This) => {
+    setObject(props.Dlist.find((x) => x.Adhaar === This));
+    setAdhaar(This);
+  };
 
   const handleSubmit = async () => {
     let data = [
@@ -43,7 +64,7 @@ export const AddTrip = (props) => {
         Loaded: parseInt(Load),
         Rate: parseInt(Rate),
         Product: Product,
-        Advance: parseInt(Advance),
+        Advance: Advance,
         TripDone: false,
       },
     ];
@@ -58,12 +79,43 @@ export const AddTrip = (props) => {
         body: JSON.stringify(data),
       }).then((response) => {
         if (response.status === 204) {
-          toast({
-            title: "Added Successfully",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          fetch(`${URL}/DriverDetailsApi`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
+            },
+            body: JSON.stringify([
+              {
+                __id: Object.__id,
+                Trips: parseInt(CTrips),
+                TotalAdvance: CAdvance,
+              },
+            ]),
+          })
+            .then((response) => {
+              if (response.status === 204) {
+                toast({
+                  title: "Added Successfully",
+                  status: "success",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              } else {
+                toast({
+                  title: "Internal Server Error",
+                  status: "error",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              }
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         } else {
           toast({
             title: "Internal Server Error",
@@ -72,9 +124,6 @@ export const AddTrip = (props) => {
             isClosable: true,
           });
         }
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       });
     } else {
       toast({
@@ -100,14 +149,12 @@ export const AddTrip = (props) => {
         />
         <Select
           mt={"2%"}
-          placeholder="Select Drive"
-          value={Name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
+          placeholder="Select Driver"
+          value={Adhaar}
+          onChange={(e) => handleItem(e.target.value)}
         >
           {props.Dlist.map((element) => {
-            return <option value={element.Name}>{element.Name}</option>;
+            return <option value={element.Adhaar}>{element.Name}</option>;
           })}
         </Select>
         <Select
@@ -203,7 +250,7 @@ export const AddTrip = (props) => {
           variant="outline"
           onClick={props.onClose}
         >
-          Clear
+          Close
         </Button>
       </Box>
     </Container>

@@ -5,6 +5,7 @@ import {
   Container,
   Heading,
   Text,
+  Box,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -19,22 +20,26 @@ const DListContainer = (props) => {
           <Heading size={"md"}>{props.element.Name}</Heading>
         </CardHeader>
         <CardBody py={0} mb={"4%"} display={"inline-flex"} flexWrap={"wrap"}>
-          <Text mx={"1"} fontWeight={"bold"}>
-            Unpaid:
-          </Text>
-          <Text mx={"1"}>{props.element.UnpaidTrip}</Text>
-          <Text mx={"1"} fontWeight={"bold"}>
-            Total:
-          </Text>
-          <Text mx={"1"}>{props.element.TotalTrip}</Text>
-          <Text mx={"1"} fontWeight={"bold"}>
-            Advance:
-          </Text>
-          <Text mx={"1"}>{props.element.TotalAdvance}</Text>
-          <Text mx={"1"} fontWeight={"bold"}>
-            Batta:
-          </Text>
-          <Text mx={"1"}>{props.element.Batta}</Text>
+          <Box display={"inline-flex"}>
+            <Text mx={"1"} fontWeight={"bold"}>
+              Trips:
+            </Text>
+            <Text mx={"1"}>{props.element.Trips}</Text>
+            <Text mx={"1"} fontWeight={"bold"}>
+              Unpaid Batta:
+            </Text>
+            <Text mx={"1"}>{props.element.UnpaidBatta}</Text>
+          </Box>
+          <Box display={"inline-flex"} >
+            <Text mx={"1"} fontWeight={"bold"}>
+              Advance:
+            </Text>
+            <Text mx={"1"}>{props.element.TotalAdvance}</Text>
+            <Text mx={"1"} fontWeight={"bold"}>
+              Paid Batta:
+            </Text>
+            <Text mx={"1"}>{props.element.TotalBatta}</Text>
+          </Box>
         </CardBody>
       </Card>
     </Container>

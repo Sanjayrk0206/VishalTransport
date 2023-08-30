@@ -149,12 +149,12 @@ export const Dashboard = () => {
             </VStack>
           </Box>
         </Box>
-        <Box w={"100%"} my={"3"}>
+        {/* <Box w={"100%"} my={"3"}>
           <Heading pl={"2"} size={["sm", "lg"]}>
             Upcoming Dates
           </Heading>
           <Divider />
-        </Box>
+        </Box> */}
       </Container>
 
       <Modal isOpen={isOpen} onClose={onClose} size={"4xl"}>

@@ -42,7 +42,7 @@ export const EndTrip = (props) => {
         UnloadedDate: Date,
         Unloaded: parseInt(Unload),
         Shortage: Shortage,
-        Amount: Amount,
+        Amount: Amount.toString(),
         Invoice: Invoice,
         DieselConsumption: parseInt(Consumption),
       },
@@ -151,7 +151,7 @@ export const EndTrip = (props) => {
           variant="outline"
           onClick={props.onClose}
         >
-          Clear
+          Close
         </Button>
       </Box>
     </Container>
