@@ -19,14 +19,24 @@ export const EndTrip = (props) => {
   const [Unload, setUnload] = useState("");
   const [Invoice, setInvoice] = useState();
   const [Consumption, setConsumption] = useState();
+  const [VConsumption, setVConsumption] = useState();
 
   const Rate = props.element.Rate;
+
+  const VehicleDetails = props.Vlist.find(
+    (x) => x.Registration === props.element.Vehicle
+  );
 
   useEffect(() => {
     if (!Date) {
       setDate(moment().format("YYYY-MM-DD"));
     }
-  }, [Date]);
+    if (Consumption && VehicleDetails) {
+      setVConsumption(Consumption + VehicleDetails.DieselConsumption);
+    } else {
+      setVConsumption(Consumption);
+    }
+  }, [Date, Consumption, VehicleDetails]);
 
   const handleSubmit = async () => {
     const Loaded = props.element.Loaded;
@@ -58,12 +68,43 @@ export const EndTrip = (props) => {
         body: JSON.stringify(data),
       }).then((response) => {
         if (response.status === 204) {
-          toast({
-            title: "Updated Successfully",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
+            },
+            body: JSON.stringify([
+              {
+                __id: VehicleDetails.__id,
+                DieselConsumption: VConsumption,
+                isTrip: false,
+              },
+            ]),
+          })
+            .then((response) => {
+              if (response.status === 204) {
+                toast({
+                  title: "Updated Successfully",
+                  status: "success",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              } else {
+                toast({
+                  title: "Internal Server Error",
+                  status: "error",
+                  duration: 2000,
+                  isClosable: true,
+                });
+              }
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         } else {
           toast({
             title: "Internal Server Error",
@@ -72,9 +113,6 @@ export const EndTrip = (props) => {
             isClosable: true,
           });
         }
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       });
     } else {
       toast({

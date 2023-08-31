@@ -127,7 +127,7 @@ export const Dashboard = () => {
               {Trip.map((element, index) => {
                 return (
                   <div key={index}>
-                    <ListContainer element={element} />
+                    <ListContainer element={element} Vlist={Vlist} />
                   </div>
                 );
               })}

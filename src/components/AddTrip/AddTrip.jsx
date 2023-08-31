@@ -29,27 +29,33 @@ export const AddTrip = (props) => {
   const [CAdvance, setCAdvance] = useState("");
   const [CTrips, setCTrips] = useState();
 
-  const [Object, setObject] = useState();
+  const [Driver, setDriver] = useState();
+  const [VTrips, setVTrips] = useState(0);
 
   useEffect(() => {
     if (!Date) {
       setDate(moment().format("YYYY-MM-DD"));
     }
-    if (Object) {
-      setName(`${Object.Name} - ${Object.Adhaar}`);
-      setCTrips((Object.Trips ? Object.Trips : 0) + 1);
-      if (Object.TotalAdvance) {
+    if (Driver) {
+      setName(`${Driver.Name} - ${Driver.Adhaar}`);
+      setCTrips((Driver.Trips ? Driver.Trips : 0) + 1);
+      if (Driver.TotalAdvance) {
         setCAdvance(
-          (parseInt(Object.TotalAdvance) + parseInt(Advance)).toString()
+          (parseInt(Driver.TotalAdvance) + parseInt(Advance)).toString()
         );
       } else {
         setCAdvance(Advance);
       }
     }
-  }, [Date, Object, Advance]);
+
+    if (Vehicle) {
+      var Object = props.Vlist.find((x) => x.Registration === Vehicle);
+      setVTrips((Object.TotalTrips ? Object.TotalTrips : 0) + 1);
+    }
+  }, [Date, Driver, Advance, Vehicle, props.Vlist]);
 
   const handleItem = (This) => {
-    setObject(props.Dlist.find((x) => x.Adhaar === This));
+    setDriver(props.Dlist.find((x) => x.Adhaar === This));
     setAdhaar(This);
   };
 
@@ -87,7 +93,7 @@ export const AddTrip = (props) => {
             },
             body: JSON.stringify([
               {
-                __id: Object.__id,
+                __id: Driver.__id,
                 Trips: parseInt(CTrips),
                 TotalAdvance: CAdvance,
               },
@@ -95,12 +101,44 @@ export const AddTrip = (props) => {
           })
             .then((response) => {
               if (response.status === 204) {
-                toast({
-                  title: "Added Successfully",
-                  status: "success",
-                  duration: 2000,
-                  isClosable: true,
-                });
+                fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
+                  },
+                  body: JSON.stringify([
+                    {
+                      __id: props.Vlist.find((x) => x.Registration === Vehicle)
+                        .__id,
+                      TotalTrips: VTrips,
+                      isTrip: true,
+                    },
+                  ]),
+                })
+                  .then((response) => {
+                    if (response.status === 204) {
+                      toast({
+                        title: "Added Successfully",
+                        status: "success",
+                        duration: 2000,
+                        isClosable: true,
+                      });
+                    } else {
+                      toast({
+                        title: "Internal Server Error",
+                        status: "error",
+                        duration: 2000,
+                        isClosable: true,
+                      });
+                    }
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 2000);
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
               } else {
                 toast({
                   title: "Internal Server Error",
@@ -109,9 +147,6 @@ export const AddTrip = (props) => {
                   isClosable: true,
                 });
               }
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -166,12 +201,15 @@ export const AddTrip = (props) => {
           }}
         >
           {props.Vlist.map((element) => {
-            if (!element.isTrip)
+            if (!element.isTrip) {
               return (
                 <option value={element.Registration}>
                   {element.Registration}
                 </option>
               );
+            } else {
+              return <></>;
+            }
           })}
         </Select>
         <Input

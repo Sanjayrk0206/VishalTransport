@@ -184,7 +184,12 @@ const HireTable = () => {
       <TableContainer mt={5}>
         {Trip.map((element, index) => {
           return (
-            <Table mt={2} variant="simple" key={index}>
+            <Table
+              mt={5}
+              variant="simple"
+              key={index}
+              borderBottom={"2px solid Black"}
+            >
               <Thead>
                 <Tr>
                   <Th>Date</Th>

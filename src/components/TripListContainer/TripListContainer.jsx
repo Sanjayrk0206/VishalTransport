@@ -70,7 +70,11 @@ const ListContainer = (props) => {
           <ModalHeader>{"Trip Details"}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <EndTrip element={props.element} onClose={onClose} />
+            <EndTrip
+              element={props.element}
+              Vlist={props.Vlist}
+              onClose={onClose}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
