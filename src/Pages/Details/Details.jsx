@@ -32,6 +32,8 @@ export const Details = () => {
   const [Dlist, setDList] = useState([]);
   const [Vlist, setVlist] = useState([]);
   const [Loading, setLoading] = useState();
+  const [Driver, setDriver] = useState();
+  const [Vehicle, setVehicle] = useState();
 
   useEffect(() => {
     setLoading(true);
@@ -106,11 +108,34 @@ export const Details = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <VStack>
+                  <VStack
+                    onClick={
+                      title
+                        ? () => {
+                            setTitle(false);
+                          }
+                        : undefined
+                    }
+                  >
                     {Dlist.map((element, index) => {
                       return (
-                        <Box key={index} w={"full"}>
-                          <DListContainer element={element} Vehicle={Vlist} />
+                        <Box
+                          id={element.__id}
+                          key={index}
+                          w={"full"}
+                          onClick={(e) => {
+                            setDriver(
+                              Dlist.find(
+                                (x) => x.__id === parseInt(e.currentTarget.id)
+                              )
+                            );
+                          }}
+                        >
+                          <DListContainer
+                            element={element}
+                            Vehicle={Vlist}
+                            onOpen={onOpen}
+                          />
                         </Box>
                       );
                     })}
@@ -132,13 +157,34 @@ export const Details = () => {
                   </Box>
                 </TabPanel>
                 <TabPanel>
-                  {Vlist.map((element, index) => {
-                    return (
-                      <Box key={index} w={"full"}>
-                        <VListContainer element={element} />
-                      </Box>
-                    );
-                  })}
+                  <VStack
+                    onClick={
+                      title
+                        ? () => {
+                            setTitle(true);
+                          }
+                        : undefined
+                    }
+                  >
+                    {Vlist.map((element, index) => {
+                      return (
+                        <Box
+                          id={element.Registration}
+                          key={index}
+                          w={"full"}
+                          onClick={(e) => {
+                            setVehicle(
+                              Vlist.find(
+                                (x) => x.Registration === e.currentTarget.id
+                              )
+                            );
+                          }}
+                        >
+                          <VListContainer element={element} onOpen={onOpen} />
+                        </Box>
+                      );
+                    })}
+                  </VStack>
                   <Box
                     display={"flex"}
                     justifyContent={"flex-end"}
@@ -168,9 +214,9 @@ export const Details = () => {
               <ModalCloseButton />
               <ModalBody>
                 {title ? (
-                  <AddVehicle list={Vlist} onClose={onClose} />
+                  <AddVehicle list={Vlist} element={Vehicle} />
                 ) : (
-                  <AddDriver list={Dlist} onClose={onClose} />
+                  <AddDriver list={Dlist} element={Driver} />
                 )}
               </ModalBody>
             </ModalContent>

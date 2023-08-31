@@ -8,7 +8,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { USERNAME, TOKEN, URL } from "../../env";
 
 const AddVehicle = (props) => {
@@ -24,24 +24,25 @@ const AddVehicle = (props) => {
   const [MP, setMP] = useState();
   const [Loan, setLoan] = useState();
   const [Date, setDate] = useState();
+  const [isTrip, setisTrip] = useState(false);
+
+  useEffect(() => {
+    if (props.element) {
+      setRegistration(props.element.Registration);
+      setEngine(props.element.Engine);
+      setChassis(props.element.Chassis);
+      setRC(props.element.RCValidityDate.toString().slice(0, 10));
+      setNP(props.element.NPDate.toString().slice(0, 10));
+      setMP(props.element.MPTaxDate.toString().slice(0, 10));
+      setInsurance(props.element.InsuranceExpiryDate.toString().slice(0, 10));
+      setLoan(props.element.LoanAmount);
+      if (props.element.MonthlyDate)
+        setDate(props.element.MonthlyDate.toString().slice(0, 10));
+      setisTrip(props.element.isTrip);
+    }
+  }, [props.element]);
 
   const handleSubmit = async () => {
-    let data = [
-      {
-        Registration: Registration,
-        Engine: Engine,
-        Chassis: Chassis,
-        InsuranceExpiryDate: Insurance,
-        RCValidityDate: RC,
-        NPDate: NP,
-        MPTaxDate: MP,
-        LoanAmount: Loan,
-        MonthlyDate: Date,
-        isTrip: false,
-      },
-    ];
-
-    console.log(data);
     if (
       Registration &&
       Engine &&
@@ -52,45 +53,108 @@ const AddVehicle = (props) => {
       MP &&
       (!isloan || (Loan && Date))
     ) {
-      if (
-        props.list.find((element) => element.Registration === Registration) ||
-        props.list.find((element) => element.Engine === Engine) ||
-        props.list.find((element) => element.Chassis === Chassis)
-      ) {
-        toast({
-          title: "Value already exists",
-          status: "info",
-          duration: 2000,
-          isClosable: true,
-        });
-      } else {
-        await fetch(`${URL}/VehicleDetailsApi`, {
-          method: "POST",
+      if (props.element) {
+        let data = [
+          {
+            __id: props.element.__id,
+            Registration: Registration,
+            Engine: Engine,
+            Chassis: Chassis,
+            InsuranceExpiryDate: Insurance,
+            RCValidityDate: RC,
+            NPDate: NP,
+            MPTaxDate: MP,
+            LoanAmount: Loan,
+            MonthlyDate: Date,
+            isTrip: isTrip,
+          },
+        ];
+        fetch(`${URL}/VehicleDetailsApi`, {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
           },
           body: JSON.stringify(data),
-        }).then((response) => {
-          if (response.status === 204) {
-            toast({
-              title: "Added Successfully",
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-            });
-          } else {
-            toast({
-              title: "Internal Server Error",
-              status: "error",
-              duration: 2000,
-              isClosable: true,
-            });
-          }
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        });
+        })
+          .then((response) => {
+            if (response.status === 204) {
+              toast({
+                title: "Updated Successfully",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+              });
+            } else {
+              toast({
+                title: "Internal Server Error",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+              });
+            }
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        let data = [
+          {
+            Registration: Registration,
+            Engine: Engine,
+            Chassis: Chassis,
+            InsuranceExpiryDate: Insurance,
+            RCValidityDate: RC,
+            NPDate: NP,
+            MPTaxDate: MP,
+            LoanAmount: Loan,
+            MonthlyDate: Date,
+            isTrip: isTrip,
+          },
+        ];
+        if (
+          props.list.find((element) => element.Registration === Registration) ||
+          props.list.find((element) => element.Engine === Engine) ||
+          props.list.find((element) => element.Chassis === Chassis)
+        ) {
+          toast({
+            title: "Value already exists",
+            status: "info",
+            duration: 2000,
+            isClosable: true,
+          });
+        } else {
+          await fetch(`${URL}/VehicleDetailsApi`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
+            },
+            body: JSON.stringify(data),
+          }).then((response) => {
+            if (response.status === 204) {
+              toast({
+                title: "Added Successfully",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+              });
+            } else {
+              toast({
+                title: "Internal Server Error",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+              });
+            }
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          });
+        }
       }
     } else {
       toast({
@@ -102,8 +166,22 @@ const AddVehicle = (props) => {
     }
   };
 
+  const handleClear = () => {
+    setChassis("");
+    setDate("");
+    setEngine("");
+    setLoan("");
+    setisloan(false);
+    setMP("");
+    setNP("");
+    setRC("");
+    if (!props.element) setRegistration("");
+    setInsurance("");
+  };
+
   return (
     <Container maxW={"100%"} mb={"5vh"}>
+      {console.log(props)}
       <Box display={"flex"} justifyContent={"space-around"} p={"0.5%"}>
         <Input
           variant="flushed"
@@ -113,6 +191,7 @@ const AddVehicle = (props) => {
           onChange={(e) => {
             setRegistration(e.target.value);
           }}
+          isDisabled={props.element ? true : false}
         />
       </Box>
       <Box
@@ -216,6 +295,7 @@ const AddVehicle = (props) => {
           onChange={(e) => {
             setisloan(!isloan);
           }}
+          isChecked={isloan}
         />
       </Box>
       <Box
@@ -254,7 +334,7 @@ const AddVehicle = (props) => {
           mx={"1.5%"}
           colorScheme="blue"
           variant="outline"
-          onClick={props.onClose}
+          onClick={handleClear}
         >
           Clear
         </Button>

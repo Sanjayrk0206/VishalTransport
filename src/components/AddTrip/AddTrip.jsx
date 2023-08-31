@@ -166,11 +166,12 @@ export const AddTrip = (props) => {
           }}
         >
           {props.Vlist.map((element) => {
-            return (
-              <option value={element.Registration}>
-                {element.Registration}
-              </option>
-            );
+            if (!element.isTrip)
+              return (
+                <option value={element.Registration}>
+                  {element.Registration}
+                </option>
+              );
           })}
         </Select>
         <Input

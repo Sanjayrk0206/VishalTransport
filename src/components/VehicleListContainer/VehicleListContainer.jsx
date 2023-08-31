@@ -12,6 +12,7 @@ import {
   VStack,
   HStack,
   IconButton,
+  Button,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import React from "react";
@@ -101,14 +102,19 @@ const VListContainer = (props) => {
             )}
           </VStack>
 
-          <IconButton
-            m={["3", "unset"]}
-            ml={["40%", "unset"]}
-            colorScheme="blue"
-            aria-label="Delete Driver"
-            icon={<DeleteIcon />}
-            onClick={onOpen}
-          />
+          <Box>
+            <Button m={0} colorScheme={"whatsapp"} onClick={props.onOpen}>
+              Edit
+            </Button>
+            <IconButton
+              m={["3", "unset"]}
+              ml={["40%", "2"]}
+              colorScheme="blue"
+              aria-label="Delete Driver"
+              icon={<DeleteIcon />}
+              onClick={onOpen}
+            />
+          </Box>
         </CardFooter>
       </Card>
 
