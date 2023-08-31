@@ -10,7 +10,7 @@ import {
   Select,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { URL, USERNAME, TOKEN } from "../env";
 
 const EditTrip = (props) => {
@@ -29,39 +29,6 @@ const EditTrip = (props) => {
   const [Advance, setAdvance] = useState(props.element.Advance);
   const [Diesel, setDiesel] = useState(props.element.DieselConsumption);
   const [Payment, setPayment] = useState(props.element.Payment);
-
-  const [DList, setDList] = useState({});
-  const [UnpaidBatta, setUnpaidBatta] = useState();
-
-  const base64 = require("base-64");
-
-  useEffect(() => {
-    fetch(
-      `${URL}/DriverDetailsApi?Adhaar=${Driver.split(" - ")[1]}&Name=${
-        Driver.split(" - ")[0]
-      }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic " + base64.encode(USERNAME + ":" + TOKEN),
-        },
-      }
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
-        }
-      })
-      .then((data) => {
-        setDList(data[0]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [Driver, base64]);
 
   const handleSubmit = () => {
     let Amount = Unloaded - Loaded > 0 ? Loaded * Rate : Unloaded * Rate;
@@ -111,48 +78,12 @@ const EditTrip = (props) => {
         body: JSON.stringify(data),
       }).then((response) => {
         if (response.status === 204) {
-          if (Batta) {
-            fetch(`${URL}/DriverDetailsApi`, {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Basic " + btoa(USERNAME + ":" + TOKEN),
-              },
-              body: JSON.stringify([
-                {
-                  __id: DList.__id,
-                  UnpaidBatta: UnpaidBatta,
-                },
-              ]),
-            })
-              .then((response) => {
-                if (response.status === 204) {
-                  toast({
-                    title: "Updated Successfully",
-                    status: "success",
-                    duration: 2000,
-                    isClosable: true,
-                  });
-                } else {
-                  toast({
-                    title: "Internal Server Error",
-                    status: "error",
-                    duration: 2000,
-                    isClosable: true,
-                  });
-                }
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
-          } else {
-            toast({
-              title: "Updated Successfully",
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-            });
-          }
+          toast({
+            title: "Updated Successfully",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
         } else {
           toast({
             title: "Internal Server Error",
@@ -161,9 +92,9 @@ const EditTrip = (props) => {
             isClosable: true,
           });
         }
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 2000);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       });
     } else {
       toast({
@@ -416,17 +347,6 @@ const EditTrip = (props) => {
               value={Batta}
               onChange={(e) => {
                 setBatta(e.target.value);
-                if (e.target.value && DList) {
-                  if (DList.UnpaidBatta) {
-                    setUnpaidBatta(
-                      (
-                        parseInt(DList.UnpaidBatta) + parseInt(e.target.value)
-                      ).toString()
-                    );
-                  } else {
-                    setUnpaidBatta(e.target.value);
-                  }
-                }
               }}
             />
           </NumberInput>

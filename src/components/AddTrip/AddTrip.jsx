@@ -101,7 +101,7 @@ export const AddTrip = (props) => {
           })
             .then((response) => {
               if (response.status === 204) {
-                fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+                fetch(`${URL}/VehicleDetailsApi`, {
                   method: "PATCH",
                   headers: {
                     "Content-Type": "application/json",
@@ -217,29 +217,26 @@ export const AddTrip = (props) => {
           mt={"2%"}
           value={From}
           onChange={(e) => setFrom(e.target.value)}
-          autoComplete
+          autoComplete={true}
         />
         <Input
           placeholder="To"
           mt={"2%"}
           value={To}
           onChange={(e) => setTo(e.target.value)}
-          autoComplete
+          autoComplete={true}
         />
         <Input
           placeholder="Product"
           mt={"2%"}
           value={Product}
           onChange={(e) => setProduct(e.target.value)}
-          autoComplete
+          autoComplete={true}
         />
         <Box my={"2%"}>
           <Text>Loading Quantity:</Text>
-          <NumberInput>
-            <NumberInputField
-              value={Load}
-              onChange={(e) => setLoad(e.target.value)}
-            />
+          <NumberInput value={Load}>
+            <NumberInputField onChange={(e) => setLoad(e.target.value)} />
             <NumberInputStepper>
               <Text
                 w={"15%"}
@@ -255,20 +252,14 @@ export const AddTrip = (props) => {
         </Box>
         <Box>
           <Text>Rate:</Text>
-          <NumberInput>
-            <NumberInputField
-              onChange={(e) => setRate(e.target.value)}
-              value={Rate}
-            />
+          <NumberInput value={Rate}>
+            <NumberInputField onChange={(e) => setRate(e.target.value)} />
           </NumberInput>
         </Box>
         <Box>
           <Text>Advance:</Text>
-          <NumberInput>
-            <NumberInputField
-              onChange={(e) => setAdvance(e.target.value)}
-              value={Advance}
-            />
+          <NumberInput value={Advance}>
+            <NumberInputField onChange={(e) => setAdvance(e.target.value)} />
           </NumberInput>
         </Box>
       </Box>

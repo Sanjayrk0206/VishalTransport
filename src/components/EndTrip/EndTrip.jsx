@@ -68,7 +68,7 @@ export const EndTrip = (props) => {
         body: JSON.stringify(data),
       }).then((response) => {
         if (response.status === 204) {
-          fetch("https://sheetlabs.com/VISH/VehicleDetailsApi", {
+          fetch(`${URL}/VehicleDetailsApi`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -144,11 +144,8 @@ export const EndTrip = (props) => {
         />
         <Box my={"2%"}>
           <Text>Unloading Quantity:</Text>
-          <NumberInput>
-            <NumberInputField
-              value={Unload}
-              onChange={(e) => setUnload(e.target.value)}
-            />
+          <NumberInput value={Unload}>
+            <NumberInputField onChange={(e) => setUnload(e.target.value)} />
             <NumberInputStepper>
               <Text
                 w={"15%"}
@@ -164,10 +161,9 @@ export const EndTrip = (props) => {
         </Box>
         <Box>
           <Text>Diesel Consumption</Text>
-          <NumberInput>
+          <NumberInput value={Consumption}>
             <NumberInputField
               onChange={(e) => setConsumption(e.target.value)}
-              value={Consumption}
             />
           </NumberInput>
         </Box>

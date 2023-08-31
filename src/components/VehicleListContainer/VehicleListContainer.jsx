@@ -119,7 +119,7 @@ const VListContainer = (props) => {
       </Card>
 
       <DeleteDialog
-        Adhaar={props.element.Registration}
+        id={props.element.__id}
         isVehicle={true}
         onClose={onClose}
         isOpen={isOpen}

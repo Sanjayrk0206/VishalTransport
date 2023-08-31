@@ -26,19 +26,9 @@ const DListContainer = (props) => {
             </Text>
             <Text mx={"1"}>{props.element.Trips}</Text>
             <Text mx={"1"} fontWeight={"bold"}>
-              Unpaid Batta:
-            </Text>
-            <Text mx={"1"}>{props.element.UnpaidBatta}</Text>
-          </Box>
-          <Box display={"inline-flex"} >
-            <Text mx={"1"} fontWeight={"bold"}>
               Advance:
             </Text>
             <Text mx={"1"}>{props.element.TotalAdvance}</Text>
-            <Text mx={"1"} fontWeight={"bold"}>
-              Paid Batta:
-            </Text>
-            <Text mx={"1"}>{props.element.TotalBatta}</Text>
           </Box>
         </CardBody>
       </Card>

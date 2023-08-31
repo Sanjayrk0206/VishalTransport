@@ -5,7 +5,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Container,
   Heading,
   Text,
   Box,
@@ -25,44 +24,47 @@ const ListContainer = (props) => {
 
   return (
     <>
-      <Container px={0}>
-        <Card size={["lg", "md"]} variant={"elevated"}>
-          <CardHeader display={"inline-flex"} justifyContent={"space-between"}>
-            <Heading size={"md"}>
-              {props.element.Driver} | {props.element.Vehicle}
-            </Heading>
-            <Badge
-              colorScheme={props.element.isTrip ? "yellow" : "green"}
-              h={"fit-content"}
-              py={"1.5"}
-              px={"3"}
-            >
-              On Trip
-            </Badge>
-          </CardHeader>
-          <CardBody py={0} display={"inline-flex"}>
+      <Card size={["lg", "md"]} maxW={"100%"} variant={"elevated"}>
+        <CardHeader
+          display={"inline-flex"}
+          justifyContent={"space-between"}
+          w={["300px", "40vw"]}
+        >
+          <Heading size={"md"}>
+            {props.element.Driver.toString().slice(0, 10)}
+            {props.element.Vehicle}
+          </Heading>
+          <Badge
+            colorScheme={props.element.isTrip ? "yellow" : "green"}
+            h={"fit-content"}
+            py={"1.5"}
+            px={"3"}
+          >
+            On Trip
+          </Badge>
+        </CardHeader>
+        <CardBody py={0} display={"inline-flex"}>
+          <Text mx={"1"} fontWeight={"bold"}>
+            From:
+          </Text>
+          <Text mx={"1"}>{props.element.From}</Text>
+          <Text mx={"1"} fontWeight={"bold"}>
+            To:
+          </Text>
+          <Text mx={"1"}>{props.element.To}</Text>
+        </CardBody>
+        <CardFooter display={"flex"} pt={0} justifyContent={"space-between"}>
+          <Box display={"inline-flex"} fontSize={"sm"}>
             <Text mx={"1"} fontWeight={"bold"}>
-              From:
+              Loaded Quantity:
             </Text>
-            <Text mx={"1"}>{props.element.From}</Text>
-            <Text mx={"1"} fontWeight={"bold"}>
-              To:
-            </Text>
-            <Text mx={"1"}>{props.element.To}</Text>
-          </CardBody>
-          <CardFooter display={"flex"} pt={0} justifyContent={"space-between"}>
-            <Box display={"inline-flex"} fontSize={"sm"}>
-              <Text mx={"1"} fontWeight={"bold"}>
-                Loaded Quantity:
-              </Text>
-              <Text mx={"1"}>{props.element.Loaded} kgs.</Text>
-            </Box>
-            <Button size={"sm"} colorScheme={"green"} onClick={onOpen}>
-              Trip Done
-            </Button>
-          </CardFooter>
-        </Card>
-      </Container>
+            <Text mx={"1"}>{props.element.Loaded} kgs.</Text>
+          </Box>
+          <Button size={"sm"} colorScheme={"green"} onClick={onOpen}>
+            Trip Done
+          </Button>
+        </CardFooter>
+      </Card>
 
       <Modal isOpen={isOpen} onClose={onClose} size={"4xl"}>
         <ModalOverlay />

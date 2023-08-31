@@ -27,6 +27,10 @@ const DeleteDialog = (props) => {
 
     if (props.isVehicle) {
       local_URL = "VehicleDetailsApi";
+    } else if (props.isTrip) {
+      local_URL = "TripDetailsApi";
+    } else if (props.isBatta) {
+      local_URL = "BattaDetailsApi";
     }
 
     if (props.id) {

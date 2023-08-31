@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   TableContainer,
@@ -17,6 +18,8 @@ import {
   useDisclosure,
   Select,
   Input,
+  IconButton,
+  Text,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
@@ -25,7 +28,7 @@ import EditTrip from "../../utils/EditTrip";
 
 const base64 = require("base-64");
 
-const HireTable = () => {
+const HireTable = (props) => {
   const [Trip, setTrip] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [Data, setData] = useState();
@@ -86,7 +89,7 @@ const HireTable = () => {
   useEffect(() => {
     if (Submit) {
       fetch(
-        `${URL}/TripDetailsApi?TripDone=true&Date=${Date}&Driver=${Driver}&Vehicle=${Vehicle}&From=${From}&To=${To}&Product=${Product}`,
+        `${URL}/TripDetailsApi?Date=${Date}&Driver=${Driver}&Vehicle=${Vehicle}&From=${From}&To=${To}&Product=${Product}`,
         {
           method: "GET",
           headers: {
@@ -207,7 +210,12 @@ const HireTable = () => {
                   <Td>{element.Date.toString().slice(0, 10)}</Td>
                   <Td>{element.Invoice}</Td>
                   <Td>
-                    {element.From} - {element.To}
+                    <Text>
+                      <b>From:</b> {element.From}
+                    </Text>
+                    <Text>
+                      <b>To:</b> {element.To}
+                    </Text>
                   </Td>
                   <Td isNumeric>{element.Loaded}</Td>
                   <Td isNumeric>{element.Unloaded}</Td>
@@ -229,7 +237,7 @@ const HireTable = () => {
               <Tbody>
                 <Tr>
                   <Td>{element.Product}</Td>
-                  <Td>{element.Driver}</Td>
+                  <Td>{element.Driver.toString().split(" - ")[0]}</Td>
                   <Td>{element.Vehicle}</Td>
                   <Td isNumeric>{element.Advance}</Td>
                   <Td isNumeric>{element.DriverBatta}</Td>
@@ -239,13 +247,24 @@ const HireTable = () => {
                     p={"2"}
                     display={"flex"}
                     justifyContent={"center"}
-                    onClick={() => {
+                    onClick={(e) => {
                       setData(element);
+                      props.setSelected(parseInt(e.currentTarget.id));
+                      props.setisTrip(true);
+                      props.setisBatta(false);
                     }}
+                    id={element.__id}
                   >
                     <Button colorScheme="whatsapp" onClick={onOpen}>
                       Edit
                     </Button>
+                    <IconButton
+                      ml={2}
+                      colorScheme="blue"
+                      aria-label="Delete Driver"
+                      icon={<DeleteIcon />}
+                      onClick={props.onOpen}
+                    />
                   </Td>
                 </Tr>
               </Tbody>

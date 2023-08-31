@@ -18,9 +18,7 @@ const AddDriver = (props) => {
   const [Driving, setDrivingLicense] = useState();
   const [Date, setDate] = useState();
   const [Trips, setTrips] = useState(0);
-  const [UnpaidBatta, setUnpaidBatta] = useState("0");
   const [TotalAdvance, setTotalAdvance] = useState("0");
-  const [TotalBatta, setTotalBatta] = useState("0");
 
   useEffect(() => {
     if (props.element) {
@@ -30,9 +28,7 @@ const AddDriver = (props) => {
       setDate(props.element.DLExpiry.toString().slice(0, 10));
       setDrivingLicense(props.element.DrivingLicense);
       setTrips(props.element.Trips);
-      setUnpaidBatta(props.element.UnpaidBatta);
       setTotalAdvance(props.element.TotalAdvance);
-      setTotalBatta(props.element.TotalBatta);
     }
   }, [props.element]);
 
@@ -48,9 +44,7 @@ const AddDriver = (props) => {
             DrivingLicense: Driving,
             DLExpiry: Date,
             Trips: Trips,
-            UnpaidBatta: UnpaidBatta,
             TotalAdvance: TotalAdvance,
-            TotalBatta: TotalBatta,
           },
         ];
         await fetch(`${URL}/DriverDetailsApi`, {
@@ -104,9 +98,7 @@ const AddDriver = (props) => {
               DrivingLicense: Driving,
               DLExpiry: Date,
               Trips: Trips,
-              UnpaidBatta: UnpaidBatta,
               TotalAdvance: TotalAdvance,
-              TotalBatta: TotalBatta,
             },
           ];
           await fetch(`${URL}/DriverDetailsApi`, {
