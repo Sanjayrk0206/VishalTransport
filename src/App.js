@@ -6,7 +6,7 @@ import { Batta } from "./Pages/Batta/Batta";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <Routes>
         <Route path="/" element={<HomePage />}>
           <Route index element={<Dashboard />} />
