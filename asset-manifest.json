@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/VishalTransport/static/css/main.3d68c413.css",
-    "main.js": "/VishalTransport/static/js/main.af66e338.js",
+    "main.js": "/VishalTransport/static/js/main.edd5ffdf.js",
     "index.html": "/VishalTransport/index.html",
     "main.3d68c413.css.map": "/VishalTransport/static/css/main.3d68c413.css.map",
-    "main.af66e338.js.map": "/VishalTransport/static/js/main.af66e338.js.map"
+    "main.edd5ffdf.js.map": "/VishalTransport/static/js/main.edd5ffdf.js.map"
   },
   "entrypoints": [
     "static/css/main.3d68c413.css",
-    "static/js/main.af66e338.js"
+    "static/js/main.edd5ffdf.js"
   ]
 }
