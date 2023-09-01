@@ -304,6 +304,7 @@ const AddVehicle = (props) => {
       <Box
         display={isloan ? ["block", "flex"] : "none"}
         justifyContent={"space-around"}
+        alignItems={"flex-end"}
         p={"0.5%"}
       >
         <Input
@@ -313,14 +314,16 @@ const AddVehicle = (props) => {
           value={Loan}
           onChange={(e) => setLoan(e.target.value)}
         />
-        <Input
-          variant="flushed"
-          placeholder="Monthly Date"
-          w={["100%", "40%"]}
-          type="date"
-          value={Date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+        <Box w={["100%", "40%"]}>
+          <Text>MP Tax Date:</Text>
+          <Input
+            variant="flushed"
+            placeholder="Monthly Date"
+            type="date"
+            value={Date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </Box>
       </Box>
       <Box display={"flex"} justifyContent={"center"} p={"0.5%"}>
         <Button

@@ -108,7 +108,7 @@ const HireTable = (props) => {
 
   return (
     <Box>
-      <Box my={2} display={"flex"}>
+      <Box my={2} display={["block", "flex"]}>
         <Input
           mx={2}
           variant="flushed"
