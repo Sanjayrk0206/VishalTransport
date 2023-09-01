@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { USERNAME, TOKEN, URL } from "../../env";
+import { useNavigate } from "react-router-dom";
 
 const AddVehicle = (props) => {
   const toast = useToast();
@@ -25,6 +26,8 @@ const AddVehicle = (props) => {
   const [Loan, setLoan] = useState();
   const [Date, setDate] = useState();
   const [isTrip, setisTrip] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (props.element) {
@@ -94,7 +97,7 @@ const AddVehicle = (props) => {
               });
             }
             setTimeout(() => {
-              window.location.reload();
+              navigate("/VishalTransport/Details");
             }, 2000);
           })
           .catch((error) => {
@@ -151,7 +154,7 @@ const AddVehicle = (props) => {
               });
             }
             setTimeout(() => {
-              window.location.reload();
+              navigate("/VishalTransport/Details");
             }, 2000);
           });
         }

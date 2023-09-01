@@ -12,6 +12,7 @@ import {
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { USERNAME, TOKEN, URL } from "../../env";
+import { useNavigate } from "react-router-dom";
 
 export const EndTrip = (props) => {
   const toast = useToast();
@@ -20,6 +21,7 @@ export const EndTrip = (props) => {
   const [Invoice, setInvoice] = useState();
   const [Consumption, setConsumption] = useState();
   const [VConsumption, setVConsumption] = useState();
+  const navigate = useNavigate();
 
   const Rate = props.element.Rate;
 
@@ -99,7 +101,7 @@ export const EndTrip = (props) => {
                 });
               }
               setTimeout(() => {
-                window.location.reload();
+                navigate("/VishalTransport/");
               }, 2000);
             })
             .catch((error) => {

@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { USERNAME, TOKEN, URL } from "../../env";
+import { useNavigate } from "react-router-dom";
 
 export const AddTrip = (props) => {
   const toast = useToast();
@@ -31,6 +32,7 @@ export const AddTrip = (props) => {
 
   const [Driver, setDriver] = useState();
   const [VTrips, setVTrips] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!Date) {
@@ -133,7 +135,7 @@ export const AddTrip = (props) => {
                       });
                     }
                     setTimeout(() => {
-                      window.location.reload();
+                      navigate("/VishalTransport/");
                     }, 2000);
                   })
                   .catch((error) => {

@@ -11,6 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { TOKEN, URL, USERNAME } from "../../env";
+import { useNavigate } from "react-router-dom";
 
 const AddBatta = (props) => {
   const toast = useToast();
@@ -18,6 +19,7 @@ const AddBatta = (props) => {
   const [Driver, setDriver] = useState();
   const [Amount, setAmount] = useState();
   const [From, setFrom] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!Date) setDate(moment().format("YYYY-MM-DD"));
@@ -57,7 +59,7 @@ const AddBatta = (props) => {
           });
         }
         setTimeout(() => {
-          window.location.reload();
+          navigate("/VishalTransport/Details");
         }, 2000);
       })
       .catch((error) => {

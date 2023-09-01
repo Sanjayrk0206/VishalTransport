@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { URL, USERNAME, TOKEN } from "../env";
+import { useNavigate } from "react-router-dom";
 
 const EditTrip = (props) => {
   const toast = useToast();
@@ -29,6 +30,7 @@ const EditTrip = (props) => {
   const [Advance, setAdvance] = useState(props.element.Advance);
   const [Diesel, setDiesel] = useState(props.element.DieselConsumption);
   const [Payment, setPayment] = useState(props.element.Payment);
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     let Amount = Unloaded - Loaded > 0 ? Loaded * Rate : Unloaded * Rate;
@@ -93,7 +95,7 @@ const EditTrip = (props) => {
           });
         }
         setTimeout(() => {
-          window.location.reload();
+          navigate("/VishalTransport/Payment");
         }, 2000);
       });
     } else {

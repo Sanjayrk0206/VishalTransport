@@ -11,10 +11,12 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { TOKEN, URL, USERNAME } from "../env";
+import { useNavigate } from "react-router-dom";
 
 const DeleteDialog = (props) => {
   const toast = useToast();
   const cancelRef = React.useRef();
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     let data = [
@@ -52,7 +54,7 @@ const DeleteDialog = (props) => {
             });
           }
           setTimeout(() => {
-            window.location.reload();
+            navigate("/VishalTransport/");
           }, 2000);
         })
         .catch((error) => {
