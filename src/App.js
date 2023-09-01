@@ -6,7 +6,7 @@ import { Batta } from "./Pages/Batta/Batta";
 
 function App() {
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter basename="/VishalTransport/">
       <Routes>
         <Route path="/" element={<HomePage />}>
           <Route index element={<Dashboard />} />
