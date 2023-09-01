@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/VishalTransport/static/css/main.3d68c413.css",
+    "main.js": "/VishalTransport/static/js/main.af66e338.js",
+    "index.html": "/VishalTransport/index.html",
+    "main.3d68c413.css.map": "/VishalTransport/static/css/main.3d68c413.css.map",
+    "main.af66e338.js.map": "/VishalTransport/static/js/main.af66e338.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3d68c413.css",
+    "static/js/main.af66e338.js"
+  ]
+}
